@@ -1,6 +1,7 @@
 package main
 
 import (
+	"books"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -20,8 +21,10 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// an example API handler
-		json.NewEncoder(w).Encode(map[string]string{"response": "Hello World!"})
+		json.NewEncoder(w).Encode("Welcome to Books management. Server is running on port 8000")
 	})
+
+	books.ProductsModule(router)
+
 	defer log.Fatal(srv.ListenAndServe())
 }
