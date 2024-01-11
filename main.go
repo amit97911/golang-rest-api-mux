@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 
 	srv := &http.Server{
 		Handler: router,
