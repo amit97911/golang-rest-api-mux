@@ -5,10 +5,23 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 )
 
+var (
+	book_router *mux.Router
+)
+
+type Books struct {
+	gorm.Model
+	id     int
+	Name   string
+	Author string
+	ISBN   string
+}
+
 func ProductsModule(router *mux.Router) {
-	book_router := router.PathPrefix("/products").Subrouter()
+	book_router = router.PathPrefix("/products").Subrouter()
 
 	book_router.HandleFunc("/", getBooks).Methods("GET")
 	book_router.HandleFunc("/{id}", getBook).Methods("GET")
