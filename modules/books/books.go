@@ -2,10 +2,11 @@ package books
 
 import (
 	"encoding/json"
+	"initializer"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
-	"gorm.io/gorm"
 )
 
 var (
@@ -13,14 +14,18 @@ var (
 )
 
 type Books struct {
-	gorm.Model
-	id     int
-	Name   string
-	Author string
-	ISBN   string
+	// gorm.Model
+	ID        uint `gorm:"primarykey"`
+	Name      string
+	Author    string
+	ISBN      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
 }
 
 func ProductsModule(router *mux.Router) {
+	initializer.DB.Migrator().CreateTable(&Books{})
 	book_router = router.PathPrefix("/products").Subrouter()
 
 	book_router.HandleFunc("/", getBooks).Methods("GET")

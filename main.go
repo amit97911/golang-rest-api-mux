@@ -3,29 +3,25 @@ package main
 import (
 	"books"
 	"encoding/json"
+	"initializer"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/mux"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 var (
-	db     *gorm.DB
-	err    error
+	// err    error
 	router *mux.Router
 	srv    *http.Server
 )
 
-func main() {
-	db, err = gorm.Open(sqlite.Open("test.sqlite"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-	// db.AutoMigrate(&books.Books{})
+func init() {
+	initializer.Connect()
+}
 
+func main() {
 	router = mux.NewRouter().StrictSlash(true)
 
 	srv = &http.Server{
@@ -41,8 +37,6 @@ func main() {
 	})
 
 	books.ProductsModule(router)
-
-	db.Migrator().CreateTable(&books.Books{})
 
 	defer log.Fatal(srv.ListenAndServe())
 }
